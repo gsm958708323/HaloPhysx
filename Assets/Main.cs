@@ -11,7 +11,23 @@ public class Main : MonoBehaviour
     public Transform Player;
 
     EnvCollider envCollider;
-    PlayerCollider playerCollider;
+    public PlayerLogic PlayerLogic;
+
+    void Awake()
+    {
+        GameSetting.Instance.OnTick = OnTick;
+    }
+
+    private void OnTick(int frame)
+    {
+        /*
+        逻辑和显示分离
+        显示层：Update 获取输入数据，将逻辑位置给显示层，处理逻辑数据平滑等
+        逻辑层：15帧 根据输入数据
+        */
+        PlayerLogic.Tick(frame);
+        envCollider.Tick(frame);
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -22,38 +38,39 @@ public class Main : MonoBehaviour
 
     private void InitPlayer()
     {
-        var cfg = new ColliderConfig
+        var cfg = new CylinderConfig
         {
             Name = "Player",
             Pos = new PEVector3(Player.position),
-            Type = ColliderType.Capsule,
             Radius = (PEInt)(Player.localScale.x / 2),
         };
 
-        playerCollider.Init(cfg);
+        PlayerLogic.Init();
+        PlayerLogic.Enter(cfg);
     }
 
     private void InitEnv()
     {
         // todo 改成json配置
-        List<ColliderConfig> colliderCfgList = CreateEnvColliderCfgList();
+        List<ColliderConfigBase> colliderCfgList = CreateEnvColliderCfgList();
         envCollider = new EnvCollider();
-        envCollider.Init(colliderCfgList);
+        envCollider.Init();
+        envCollider.Enter(colliderCfgList);
     }
 
-    private List<ColliderConfig> CreateEnvColliderCfgList()
+    private List<ColliderConfigBase> CreateEnvColliderCfgList()
     {
-        var cfgList = new List<ColliderConfig>();
+        var cfgList = new List<ColliderConfigBase>();
         var boxColliders = Env.GetComponentsInChildren<BoxCollider>();
         foreach (var item in boxColliders)
         {
             if (!item.gameObject.activeInHierarchy)
                 continue;
             var trans = item.transform;
-            var cfg = new ColliderConfig{
+            var cfg = new BoxConfig
+            {
                 Pos = new PEVector3(trans.position),
                 Name = trans.name,
-                Type = ColliderType.Box,
                 Axis = new PEVector3[3]{
                     new PEVector3(trans.right),
                     new PEVector3(trans.up),
@@ -62,13 +79,60 @@ public class Main : MonoBehaviour
             };
             cfgList.Add(cfg);
         }
-        
+
+        CapsuleCollider[] cylinderArr = Env.GetComponentsInChildren<CapsuleCollider>();
+        foreach (var item in cylinderArr)
+        {
+            var cfg = new CylinderConfig
+            {
+                Pos = new PEVector3(transform.position),
+                Name = transform.gameObject.name,
+                Radius = (PEInt)transform.localScale.x / 2,
+            };
+            cfgList.Add(cfg);
+        }
+
         return cfgList;
     }
+}
 
-    // Update is called once per frame
-    void Update()
+/*
+var driver = Entry.Instance.GetManager<UpdateDriver>()
+updateDriver.AddUpdater<Rener>()
+updateDriver.AddUpdater<Logic>()
+// 渲染和表现分离
+public class Logic:IUpdate{
+    void Init()
+    void Enter()
+    void Exit()
+
+    void Update(deltaTime)
     {
+        if(cacheTime > frameCost)
+        {
+            Tick()
+        }
+    }
 
+    void Tick()
+    {
+        playerLogic.Tick()
+    }
+
+}
+
+public class Render:Mono, IUpdate{
+    void Init()
+    void Enter()
+    void Exit()
+
+    void Update(deltaTime)
+    {
+        playerRender.Update()
     }
 }
+
+// 逻辑和表现通讯
+
+
+*/

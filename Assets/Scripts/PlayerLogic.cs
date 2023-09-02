@@ -1,12 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace Physx
 {
-    public class EnvCollider : ILogicT<List<ColliderConfigBase>>
+    public class PlayerLogic : CylinderCollider, ILogicT<CylinderConfig>
     {
-        public void Enter(List<ColliderConfigBase> list)
+        public void Enter(CylinderConfig t)
         {
+
         }
 
         public void Exit()
