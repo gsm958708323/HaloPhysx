@@ -2,7 +2,7 @@
 
 namespace Frame
 {
-    public class World
+    public interface IBehaviour
     {
         
     }

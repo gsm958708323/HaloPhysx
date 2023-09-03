@@ -2,7 +2,7 @@
 
 namespace Frame
 {
-    public class Entity
+    public static class EntityExtension
     {
 
     }
