@@ -10,14 +10,20 @@ namespace Frame
     {
         public List<IEntitySystem> systemList = new List<IEntitySystem>();
 
-        public EntityBehaviour AddSystem(IEntitySystem system)
+        public T AddSystem<T>() where T : IEntitySystem, new()
+        {
+            var system = new T();
+            return AddSystem(system) as T;
+        }
+
+        public IEntitySystem AddSystem(IEntitySystem system)
         {
             if (!ExistSystem(system))
             {
                 systemList.Add(system);
                 system.World = Simulation.GetWorld();
             }
-            return this;
+            return system;
         }
 
         public bool ExistSystem(IEntitySystem system)
@@ -40,5 +46,7 @@ namespace Frame
                 item.Tick();
             }
         }
+
+
     }
 }

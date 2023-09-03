@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading;
+using Sirenix.OdinInspector.Editor.TypeSearch;
 using UnityEngine;
 
 namespace Frame
@@ -14,6 +14,10 @@ namespace Frame
         /// 管理器组成的链表，优先级高的排在前面
         /// </summary>
         private LinkedList<IManager> managerLinked;
+        public static SimulationManager SimulationManager;
+        public static DriverManager DriverManager;
+        public static TestManager TestManager;
+
         protected override void Awake()
         {
             base.Awake();
@@ -22,6 +26,9 @@ namespace Frame
 
         private void Start()
         {
+            SimulationManager = GetManager<SimulationManager>();
+            DriverManager = GetManager<DriverManager>();
+            TestManager = GetManager<TestManager>();
 
         }
 
@@ -59,7 +66,7 @@ namespace Frame
 
         IManager AddManager(Type type)
         {
-            IManager manager = (IManager)Activator.CreateInstance(type);
+            IManager manager = (IManager)Activator.CreateInstance(type, true);
             if (manager == null)
             {
                 Debugger.LogError($"[管理器] 创建管理器失败 {type.FullName}", LogDomain.Manager);

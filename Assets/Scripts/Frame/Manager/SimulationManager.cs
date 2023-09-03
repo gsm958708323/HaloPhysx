@@ -9,10 +9,10 @@ namespace Frame
     /// </summary>
     public class SimulationManager : IManager
     {
-        public int TargetFrameRate = 60;
+        public static int TargetFrameRate = 60;
         float perFrameCost;
         float cacheTime;
-        int curFrame;
+        public int curFrame;
         List<Simulation> simulationList;
 
         private SimulationManager()
@@ -64,7 +64,8 @@ namespace Frame
         public override void Init()
         {
             Application.targetFrameRate = TargetFrameRate;
-            perFrameCost = 1 / TargetFrameRate;
+            // 必须用浮点数，两个整型做除法会被省略小数点
+            perFrameCost = 1.0f / TargetFrameRate;
             curFrame = 1;
             cacheTime = 0;
             foreach (Simulation sim in simulationList)

@@ -2,9 +2,9 @@
 
 namespace Frame
 {
-    public interface IEntitySystem
+    public abstract class IEntitySystem
     {
-        World World { get; set; }
-        void Tick();
+        public World World { get; set; }
+        public virtual void Tick() { }
     }
 }

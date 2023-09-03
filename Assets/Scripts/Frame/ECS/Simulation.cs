@@ -40,14 +40,20 @@ namespace Frame
             return default;
         }
 
-        public Simulation AddBehaviour(IBehaviour behaviour)
+        public T AddBehaviour<T>() where T : IBehaviour, new()
+        {
+            IBehaviour behaviour = new T();
+            return AddBehaviour(behaviour) as T;
+        }
+
+        public IBehaviour AddBehaviour(IBehaviour behaviour)
         {
             if (!ExistBehaviour(behaviour))
             {
                 behaviourList.Add(behaviour);
                 behaviour.Simulation = this;
             }
-            return this;
+            return behaviour;
         }
 
         public void RemoveBehaviour(IBehaviour behaviour)
@@ -100,5 +106,7 @@ namespace Frame
                 item.Exit();
             }
         }
+
+
     }
 }
