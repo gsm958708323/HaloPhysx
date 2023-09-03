@@ -1,13 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Frame
 {
     /// <summary>
     /// 模拟器管理
     /// </summary>
-    public class SimulationManager : Singleton<SimulationManager>, ILogic
+    public class SimulationManager : IManager
     {
+        public int TargetFrameRate = 60;
+        float perFrameCost;
+        float cacheTime;
+        int curFrame;
         List<Simulation> simulationList;
 
         private SimulationManager()
@@ -44,28 +49,45 @@ namespace Frame
             return null;
         }
 
-        public void Enter()
+        public override void Enter()
         {
             foreach (Simulation sim in simulationList)
                 sim.Enter();
         }
 
-        public void Exit()
+        public override void Exit()
         {
             foreach (Simulation sim in simulationList)
                 sim.Exit();
         }
 
-        public void Init()
+        public override void Init()
         {
+            Application.targetFrameRate = TargetFrameRate;
+            perFrameCost = 1 / TargetFrameRate;
+            curFrame = 1;
+            cacheTime = 0;
             foreach (Simulation sim in simulationList)
                 sim.Init();
         }
 
-        public void Tick()
+        public override void Tick()
         {
             foreach (Simulation sim in simulationList)
                 sim.Tick();
+        }
+
+        public override void Update(float deltaTime)
+        {
+            base.Update(deltaTime);
+            cacheTime += deltaTime;
+
+            while (cacheTime > perFrameCost)
+            {
+                Tick();
+                curFrame += 1;
+                cacheTime -= perFrameCost;
+            }
         }
     }
 }

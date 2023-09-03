@@ -69,8 +69,6 @@ namespace Frame
             return false;
         }
 
-
-
         public void Init()
         {
             foreach (var item in behaviourList)
