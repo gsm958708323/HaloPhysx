@@ -4,6 +4,7 @@ using UnityEngine;
 using PEMath;
 using System;
 using Physx;
+using Frame;
 
 public class Main : MonoBehaviour
 {
@@ -15,7 +16,7 @@ public class Main : MonoBehaviour
 
     void Awake()
     {
-        GameSetting.Instance.OnTick = OnTick;
+        
     }
 
     private void OnTick(int frame)
@@ -32,8 +33,8 @@ public class Main : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        InitEnv();
-        InitPlayer();
+        // InitEnv();
+        // InitPlayer();
     }
 
     private void InitPlayer()

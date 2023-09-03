@@ -2,8 +2,8 @@
 
 namespace Frame
 {
-    public class World
+    public static class EntityExtension
     {
-        
+
     }
 }
