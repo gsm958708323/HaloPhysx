@@ -2,10 +2,10 @@
 
 namespace Frame
 {
-    public interface IComponent
+    public abstract class IComponent
     {
-        Guid EntityId { get; set; }
-        IComponent Clone();
-        int GetCommand();
+        public Guid EntityId { get; set; }
+        public virtual IComponent Clone() { return null; }
+        public virtual int GetCommand() { return 0; }
     }
 }

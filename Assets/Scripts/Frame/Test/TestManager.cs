@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Frame;
@@ -9,11 +10,14 @@ public class TestManager : IManager
     {
         base.Init();
 
-        Entry.DriverManager.AddDriver<MoveDriver>();
+        // Entry.DriverManager.AddDriver<MoveDriver>();
 
         var sim = new Simulation(1);
         var behaviour = sim.AddBehaviour<EntityBehaviour>();
         behaviour.AddSystem<MoveSystem>();
         Entry.SimulationManager.AddSimulation(sim);
+
+        var entity = sim.GetWorld().AddEntity(Guid.NewGuid());
+        entity.AddComponent<MoveComp>();
     }
 }

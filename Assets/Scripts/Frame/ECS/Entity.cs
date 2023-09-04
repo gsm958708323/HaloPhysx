@@ -39,6 +39,12 @@ namespace Frame
             return World.GetComponent(Id, comp.GetType()) != null;
         }
 
+        public T AddComponent<T>() where T : IComponent, new()
+        {
+            var comp = new T();
+            return AddComponent(comp) as T;
+        }
+
         public Entity AddComponent(IComponent comp)
         {
             if (!ExistComponent(comp))
@@ -60,9 +66,11 @@ namespace Frame
         {
             if (ExistComponent(comp))
                 return;
-            
+
             World.RemoveComponent(comp);
             comp.EntityId = Guid.Empty;
         }
+
+
     }
 }
