@@ -29,7 +29,6 @@ namespace Frame
             SimulationManager = GetManager<SimulationManager>();
             DriverManager = GetManager<DriverManager>();
             TestManager = GetManager<TestManager>();
-
         }
 
         private void Update()

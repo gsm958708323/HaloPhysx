@@ -1,7 +1,11 @@
-﻿namespace Frame
+﻿using System;
+
+namespace Frame
 {
     public class Define
     {
-        public const int Client_Simulation = 1;
+        public static int Client_Simulation = 1;
+
+        public static Guid Player_EntityId = Guid.NewGuid();
     }
 }

@@ -1,18 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Frame;
 
-public class MoveRender : MonoBehaviour
+public class MoveRender : IRender
 {
-    // Start is called before the first frame update
-    void Start()
+    protected override void OnUpdate(Entity entity)
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        TransformComp transComp = entity.GetComponent<TransformComp>();
+        if (transComp != null)
+        {
+            gameObject.transform.position = transComp.Position;
+        }
     }
 }

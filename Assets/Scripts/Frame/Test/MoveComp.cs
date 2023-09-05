@@ -2,18 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Frame;
+using PEMath;
 
 public class MoveComp : IComponent
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public float Speed = 1;
+    public Vector3 Dir = Vector3.zero;
 
-    // Update is called once per frame
-    void Update()
+    public Vector3 GetVelocity()
     {
-        
+        return Dir * Speed;
     }
 }

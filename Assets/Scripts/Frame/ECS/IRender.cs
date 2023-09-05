@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Frame
 {
-    public class Render : MonoBehaviour
+    public class IRender : MonoBehaviour
     {
         protected Simulation Simulation;
         protected Guid EntityId;
