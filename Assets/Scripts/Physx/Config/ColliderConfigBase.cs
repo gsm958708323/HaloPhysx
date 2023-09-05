@@ -10,9 +10,5 @@ namespace Physx
         public ColliderType Type { get; internal set; }
     }
 
-    public enum ColliderType
-    {
-        Box,
-        Cylinder,
-    }
+
 }

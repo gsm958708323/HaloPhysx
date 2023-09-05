@@ -49,12 +49,7 @@ namespace Frame
             compTypeDict.Clear();
         }
 
-        public List<IComponent> GetComponents<T>() where T : IComponent
-        {
-            if (compTypeDict.ContainsKey(typeof(T)))
-                return compTypeDict[typeof(T)];
-            return null;
-        }
+
 
         public void AddComponent(IComponent comp)
         {
@@ -84,7 +79,10 @@ namespace Frame
                     compEntityDict[comp.EntityId].Remove(comp);
         }
 
-        public IComponent GetComponent(Guid entityId, Type type)
+        /// <summary>
+        /// 获取某个实体身上的组件
+        /// </summary>
+        public IComponent GetComponentByEntityId(Guid entityId, Type type)
         {
             if (compEntityDict.ContainsKey(entityId))
             {
@@ -95,6 +93,40 @@ namespace Frame
                         return item;
                 }
             }
+            return null;
+        }
+
+        /// <summary>
+        /// 获取同类型下的所有组件，包含全局组件
+        /// </summary>
+        /// <returns></returns>
+        public List<T> GetComponents<T>() where T : IComponent
+        {
+            if (compTypeDict.ContainsKey(typeof(T)))
+                return compTypeDict[typeof(T)] as List<T>;
+            return null;
+        }
+
+        /// <summary>
+        /// 添加全局组件，不跟随实体
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public T AddComponent<T>() where T : IComponent, new()
+        {
+            IComponent comp = new T();
+            AddComponent(comp);
+            return comp as T;
+        }
+
+        /// <summary>
+        /// 获取全局组件
+        /// </summary>
+        /// <returns></returns>
+        public IComponent GetComponent<T>() where T : IComponent
+        {
+            if (compTypeDict.ContainsKey(typeof(T)))
+                return compTypeDict[typeof(T)][0];
             return null;
         }
 
@@ -154,5 +186,8 @@ namespace Frame
                 compEntityDict.Remove(entityId);
             }
         }
+
+
+
     }
 }

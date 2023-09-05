@@ -8,7 +8,7 @@ namespace Frame
     /// <summary>
     /// 游戏入口
     /// </summary>
-    public class Entry : MonoSingleton<Entry>
+    public partial class Entry : MonoSingleton<Entry>
     {
         /// <summary>
         /// 管理器组成的链表，优先级高的排在前面
@@ -22,14 +22,15 @@ namespace Frame
         {
             base.Awake();
             managerLinked = new();
+
+            InitManager();
         }
 
-        private void Start()
+        private void InitManager()
         {
             SimulationManager = GetManager<SimulationManager>();
             DriverManager = GetManager<DriverManager>();
             TestManager = GetManager<TestManager>();
-
         }
 
         private void Update()

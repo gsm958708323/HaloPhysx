@@ -36,7 +36,7 @@ namespace Frame
         {
             if (LifeState == 0)
                 return false;
-            return World.GetComponent(Id, comp.GetType()) != null;
+            return World.GetComponentByEntityId(Id, comp.GetType()) != null;
         }
 
         public T AddComponent<T>() where T : IComponent, new()
@@ -59,7 +59,7 @@ namespace Frame
         {
             if (LifeState == 0)
                 return default(T);
-            return (T)World.GetComponent(Id, typeof(T));
+            return (T)World.GetComponentByEntityId(Id, typeof(T));
         }
 
         public void RemoveComponent(IComponent comp)

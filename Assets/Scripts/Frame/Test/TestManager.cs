@@ -10,14 +10,21 @@ public class TestManager : IManager
     {
         base.Init();
 
-        // Entry.DriverManager.AddDriver<MoveDriver>();
+        // // 创建模拟器
+        // var sim = new Simulation(Define.Client_Simulation);
+        // sim.AddBehaviour<InputBehaviour>();
+        // var behaviour = sim.AddBehaviour<EntityBehaviour>();
+        // behaviour.AddSystem<MoveSystem>();
+        // Entry.SimulationManager.AddSimulation(sim);
 
-        var sim = new Simulation(1);
-        var behaviour = sim.AddBehaviour<EntityBehaviour>();
-        behaviour.AddSystem<MoveSystem>();
-        Entry.SimulationManager.AddSimulation(sim);
+        // // 创建实体
+        // var entity = sim.GetWorld().AddEntity(Define.Player_EntityId);
+        // entity.AddComponent<MoveComp>();
+        // entity.AddComponent<TransformComp>();
 
-        var entity = sim.GetWorld().AddEntity(Guid.NewGuid());
-        entity.AddComponent<MoveComp>();
+        // // 绑定表现层
+        // var player = GameObject.Find("Player");
+        // var render = player.AddComponent<MoveRender>();
+        // render.SetEntityId(Define.Player_EntityId);
     }
 }

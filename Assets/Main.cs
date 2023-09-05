@@ -14,27 +14,27 @@ public class Main : MonoBehaviour
     EnvCollider envCollider;
     public PlayerLogic PlayerLogic;
 
-    void Awake()
-    {
-        
-    }
-
-    private void OnTick(int frame)
-    {
-        /*
-        逻辑和显示分离
-        显示层：Update 获取输入数据，将逻辑位置给显示层，处理逻辑数据平滑等
-        逻辑层：15帧 根据输入数据
-        */
-        PlayerLogic.Tick(frame);
-        envCollider.Tick(frame);
-    }
 
     // Start is called before the first frame update
     void Start()
     {
-        // InitEnv();
-        // InitPlayer();
+        // 添加模拟器
+        var sim = new Simulation(Define.Client_Simulation);
+
+        // 处理行为
+        sim.AddBehaviour<InputBehaviour>();
+        var behaviour = sim.AddBehaviour<EntityBehaviour>();
+        behaviour.AddSystem<MoveSystem>();
+        behaviour.AddSystem<CollisionSystem>();
+
+        // 添加全局组件
+        sim.GetWorld().AddComponent<EnvironmentComp>();
+        Entry.SimulationManager.AddSimulation(sim);
+
+        // 添加实体组件
+        var entity = sim.GetWorld().AddEntity(Define.Player_EntityId);
+        entity.AddComponent<MoveComp>();
+        entity.AddComponent<TransformComp>();
     }
 
     private void InitPlayer()

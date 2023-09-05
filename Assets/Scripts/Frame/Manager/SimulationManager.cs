@@ -30,7 +30,7 @@ namespace Frame
             if (ExistSimulation(sim))
                 simulationList.Remove(sim);
         }
-        public void RemoveSimulation(byte id)
+        public void RemoveSimulation(int id)
         {
             Simulation sim = GetSimulation(id);
             if (sim != null)
@@ -40,7 +40,7 @@ namespace Frame
         {
             return simulationList.Contains(sim);
         }
-        public Simulation GetSimulation(byte id)
+        public Simulation GetSimulation(int id)
         {
             for (int i = 0; i < simulationList.Count; ++i)
             {
