@@ -27,7 +27,7 @@ public class CollisionSystem : IEntitySystem
                 if (collder1 == collider2) continue;
                 if (collder1.Intersect(collider2))
                 {
-                    
+                    Debugger.Log($"发生碰撞：{collder1.ColliderType} {collider2.ColliderType}", LogDomain.Collider);
                 }
             }
         }
