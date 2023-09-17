@@ -1,4 +1,5 @@
 using Frame;
+using PEMath;
 using UnityEngine;
 public class InputBehaviour : IBehaviour
 {
@@ -9,10 +10,13 @@ public class InputBehaviour : IBehaviour
             return;
 
         var moveComp = entity.GetComponent<MoveComp>();
-        float x = Input.GetAxis("Horizontal");
-        float z = Input.GetAxis("Vertical");
-        var y = moveComp.Dir.y;
-        moveComp.Dir = new Vector3(x, y, z);
+        var x = (PEInt)Input.GetAxis("Horizontal");
+        var z = (PEInt)Input.GetAxis("Vertical");
+        var y = (PEInt)moveComp.Dir.y;
+
+        moveComp.Dir.x = x;
+        moveComp.Dir.y = y;
+        moveComp.Dir.z = z;
     }
 }
 

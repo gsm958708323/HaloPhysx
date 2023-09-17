@@ -10,7 +10,8 @@ namespace Frame
     {
         None, All,
         Driver,
-        Manager
+        Manager,
+        Collider
     }
 
     public class Debugger : MonoSingleton<Debugger>

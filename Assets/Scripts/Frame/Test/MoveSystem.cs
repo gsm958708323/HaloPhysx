@@ -12,9 +12,15 @@ public class MoveSystem : IEntitySystem
         {
             var moveComp = entity.GetComponent<MoveComp>();
             var transfromComp = entity.GetComponent<TransformComp>();
+            var collider = entity.GetComponent<SphereColliderComp>();
             if (moveComp != null && transfromComp != null)
             {
                 transfromComp.Translate(moveComp.GetVelocity());
+
+                if (collider != null)
+                {
+                    collider.Pos = transfromComp.Position;
+                }
             }
         }
     }

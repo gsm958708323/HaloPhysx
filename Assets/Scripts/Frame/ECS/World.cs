@@ -101,7 +101,15 @@ namespace Frame
         public List<T> GetComponents<T>() where T : IComponent
         {
             if (compTypeDict.ContainsKey(typeof(T)))
-                return compTypeDict[typeof(T)] as List<T>;
+            {
+                var list = compTypeDict[typeof(T)];
+                var result = new List<T>();
+                foreach (var item in list)
+                {
+                    result.Add(item as T);
+                }
+                return result;
+            }
             return null;
         }
 

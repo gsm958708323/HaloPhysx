@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using PEMath;
 using System;
-using Physx;
 using Frame;
+using Unity.VisualScripting;
 
 public class Main : MonoBehaviour
 {
     public Transform EnvTransform;
+    public Transform Player;
 
     // Start is called before the first frame update
     void Start()
@@ -36,9 +37,11 @@ public class Main : MonoBehaviour
         var entity = sim.GetWorld().AddEntity(Define.Player_EntityId);
         entity.AddComponent<MoveComp>();
         entity.AddComponent<TransformComp>();
+        var collider = entity.AddComponent<SphereColliderComp>();
+        collider.InitByEngineCollider(Player.GetComponent<CapsuleCollider>());
 
-        // // 添加环境实体
-        // sim.GetWorld().AddEntity(Define.Env_EntityId);
+        var render = Player.AddComponent<MoveRender>();
+        render.SetEntityId(Define.Player_EntityId);
     }
 
     void InitEnv()
@@ -52,14 +55,7 @@ public class Main : MonoBehaviour
 
             var entity = simulation.GetWorld().AddEntity(Guid.NewGuid());
             var comp = entity.AddComponent<BoxColliderComp>();
-            var trans = item.transform;
-            comp.Pos = new PEVector3(trans.position);
-            comp.Name = trans.name;
-            comp.Axis = new PEVector3[3]{
-                    new PEVector3(trans.right),
-                    new PEVector3(trans.up),
-                    new PEVector3(trans.forward),
-            };
+            comp.InitByEngineCollider(item);
         }
 
         var sphereColliders = EnvTransform.GetComponentsInChildren<CapsuleCollider>();
@@ -69,48 +65,9 @@ public class Main : MonoBehaviour
                 continue;
             var entity = simulation.GetWorld().AddEntity(Guid.NewGuid());
             var comp = entity.AddComponent<SphereColliderComp>();
-            comp.Pos = new PEVector3(transform.position);
-            comp.Name = transform.gameObject.name;
-            comp.Radius = (PEInt)transform.localScale.x / 2;
+            comp.InitByEngineCollider(item);
         }
 
         Entry.SimulationManager.GetSimulation(Define.Client_Simulation);
-    }
-
-    private List<ColliderConfigBase> CreateEnvColliderCfgList()
-    {
-        var cfgList = new List<ColliderConfigBase>();
-        var boxColliders = EnvTransform.GetComponentsInChildren<BoxCollider>();
-        foreach (var item in boxColliders)
-        {
-            if (!item.gameObject.activeInHierarchy)
-                continue;
-            var trans = item.transform;
-            var cfg = new BoxConfig
-            {
-                Pos = new PEVector3(trans.position),
-                Name = trans.name,
-                Axis = new PEVector3[3]{
-                    new PEVector3(trans.right),
-                    new PEVector3(trans.up),
-                    new PEVector3(trans.forward),
-                },
-            };
-            cfgList.Add(cfg);
-        }
-
-        CapsuleCollider[] cylinderArr = EnvTransform.GetComponentsInChildren<CapsuleCollider>();
-        foreach (var item in cylinderArr)
-        {
-            var cfg = new CylinderConfig
-            {
-                Pos = new PEVector3(transform.position),
-                Name = transform.gameObject.name,
-                Radius = (PEInt)transform.localScale.x / 2,
-            };
-            cfgList.Add(cfg);
-        }
-
-        return cfgList;
     }
 }

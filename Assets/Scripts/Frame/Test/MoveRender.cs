@@ -10,7 +10,7 @@ public class MoveRender : IRender
         TransformComp transComp = entity.GetComponent<TransformComp>();
         if (transComp != null)
         {
-            gameObject.transform.position = transComp.Position;
+            gameObject.transform.position = transComp.Position.ConvertViewVector3();
         }
     }
 }

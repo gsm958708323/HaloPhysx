@@ -15,27 +15,32 @@ public abstract class ColliderCompBase : IComponent
 {
     public ColliderType ColliderType;
 
+    public virtual void InitByEngineCollider(UnityEngine.Collider unityCollider)
+    {
+    }
+
     public bool Intersect(ColliderCompBase collider)
     {
         bool result = false;
-        if (ColliderType == ColliderType.Box)
+        var targetType = collider.ColliderType;
+        if (targetType == ColliderType.Box)
         {
-            result = IntersectBox(collider);
+            result = IntersectBox(collider as BoxColliderComp);
         }
-        else if (ColliderType == ColliderType.Sphere)
+        else if (targetType == ColliderType.Sphere)
         {
-            result = IntersectSphere(collider);
+            result = IntersectSphere(collider as SphereColliderComp);
         }
 
         return result;
     }
 
-    protected virtual bool IntersectSphere(ColliderCompBase collider)
+    protected virtual bool IntersectSphere(SphereColliderComp collider)
     {
         return false;
     }
 
-    protected virtual bool IntersectBox(ColliderCompBase collider)
+    protected virtual bool IntersectBox(BoxColliderComp collider)
     {
         return false;
     }

@@ -6,11 +6,11 @@ using PEMath;
 
 public class MoveComp : IComponent
 {
-    public float Speed = 1;
-    public Vector3 Dir = Vector3.zero;
+    public PEInt Speed = 10;
+    public PEVector3 Dir = PEVector3.zero;
 
-    public Vector3 GetVelocity()
+    public PEVector3 GetVelocity()
     {
-        return Dir * Speed;
+        return Dir * Speed * SimulationManager.FrameRate;
     }
 }
