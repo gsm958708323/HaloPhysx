@@ -8,15 +8,16 @@ using Frame;
 
 public class Main : MonoBehaviour
 {
-    public Transform Env;
-    public Transform Player;
-
-    EnvCollider envCollider;
-    public PlayerLogic PlayerLogic;
-
+    public Transform EnvTransform;
 
     // Start is called before the first frame update
     void Start()
+    {
+        InitSimulation();
+        InitEnv();
+    }
+
+    void InitSimulation()
     {
         // 添加模拟器
         var sim = new Simulation(Define.Client_Simulation);
@@ -31,38 +32,55 @@ public class Main : MonoBehaviour
         sim.GetWorld().AddComponent<EnvironmentComp>();
         Entry.SimulationManager.AddSimulation(sim);
 
-        // 添加实体组件
+        // 添加玩家实体
         var entity = sim.GetWorld().AddEntity(Define.Player_EntityId);
         entity.AddComponent<MoveComp>();
         entity.AddComponent<TransformComp>();
+
+        // // 添加环境实体
+        // sim.GetWorld().AddEntity(Define.Env_EntityId);
     }
 
-    private void InitPlayer()
+    void InitEnv()
     {
-        var cfg = new CylinderConfig
+        var simulation = Entry.SimulationManager.GetSimulation(Define.Client_Simulation);
+        var boxColliders = EnvTransform.GetComponentsInChildren<BoxCollider>();
+        foreach (var item in boxColliders)
         {
-            Name = "Player",
-            Pos = new PEVector3(Player.position),
-            Radius = (PEInt)(Player.localScale.x / 2),
-        };
+            if (!item.gameObject.activeInHierarchy)
+                continue;
 
-        PlayerLogic.Init();
-        PlayerLogic.Enter(cfg);
-    }
+            var entity = simulation.GetWorld().AddEntity(Guid.NewGuid());
+            var comp = entity.AddComponent<BoxColliderComp>();
+            var trans = item.transform;
+            comp.Pos = new PEVector3(trans.position);
+            comp.Name = trans.name;
+            comp.Axis = new PEVector3[3]{
+                    new PEVector3(trans.right),
+                    new PEVector3(trans.up),
+                    new PEVector3(trans.forward),
+            };
+        }
 
-    private void InitEnv()
-    {
-        // todo 改成json配置
-        List<ColliderConfigBase> colliderCfgList = CreateEnvColliderCfgList();
-        envCollider = new EnvCollider();
-        envCollider.Init();
-        envCollider.Enter(colliderCfgList);
+        var sphereColliders = EnvTransform.GetComponentsInChildren<CapsuleCollider>();
+        foreach (var item in sphereColliders)
+        {
+            if (!item.gameObject.activeInHierarchy)
+                continue;
+            var entity = simulation.GetWorld().AddEntity(Guid.NewGuid());
+            var comp = entity.AddComponent<SphereColliderComp>();
+            comp.Pos = new PEVector3(transform.position);
+            comp.Name = transform.gameObject.name;
+            comp.Radius = (PEInt)transform.localScale.x / 2;
+        }
+
+        Entry.SimulationManager.GetSimulation(Define.Client_Simulation);
     }
 
     private List<ColliderConfigBase> CreateEnvColliderCfgList()
     {
         var cfgList = new List<ColliderConfigBase>();
-        var boxColliders = Env.GetComponentsInChildren<BoxCollider>();
+        var boxColliders = EnvTransform.GetComponentsInChildren<BoxCollider>();
         foreach (var item in boxColliders)
         {
             if (!item.gameObject.activeInHierarchy)
@@ -81,7 +99,7 @@ public class Main : MonoBehaviour
             cfgList.Add(cfg);
         }
 
-        CapsuleCollider[] cylinderArr = Env.GetComponentsInChildren<CapsuleCollider>();
+        CapsuleCollider[] cylinderArr = EnvTransform.GetComponentsInChildren<CapsuleCollider>();
         foreach (var item in cylinderArr)
         {
             var cfg = new CylinderConfig
@@ -96,44 +114,3 @@ public class Main : MonoBehaviour
         return cfgList;
     }
 }
-
-/*
-var driver = Entry.Instance.GetManager<UpdateDriver>()
-updateDriver.AddUpdater<Rener>()
-updateDriver.AddUpdater<Logic>()
-// 渲染和表现分离
-public class Logic:IUpdate{
-    void Init()
-    void Enter()
-    void Exit()
-
-    void Update(deltaTime)
-    {
-        if(cacheTime > frameCost)
-        {
-            Tick()
-        }
-    }
-
-    void Tick()
-    {
-        playerLogic.Tick()
-    }
-
-}
-
-public class Render:Mono, IUpdate{
-    void Init()
-    void Enter()
-    void Exit()
-
-    void Update(deltaTime)
-    {
-        playerRender.Update()
-    }
-}
-
-// 逻辑和表现通讯
-
-
-*/

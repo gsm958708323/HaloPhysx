@@ -45,14 +45,14 @@ namespace Frame
             return AddComponent(comp) as T;
         }
 
-        public Entity AddComponent(IComponent comp)
+        public IComponent AddComponent(IComponent comp)
         {
             if (!ExistComponent(comp))
             {
                 comp.EntityId = Id;
                 World.AddComponent(comp);
             }
-            return this;
+            return comp;
         }
 
         public T GetComponent<T>() where T : IComponent

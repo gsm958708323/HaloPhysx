@@ -49,8 +49,6 @@ namespace Frame
             compTypeDict.Clear();
         }
 
-
-
         public void AddComponent(IComponent comp)
         {
             // 处理组件
@@ -154,6 +152,7 @@ namespace Frame
 
             Entity entity = Entity.ObjectPool.Get() as Entity;
             entity.World = this;
+            entity.Id = entityId;
             entityDict[entityId] = entity;
             return entity;
         }

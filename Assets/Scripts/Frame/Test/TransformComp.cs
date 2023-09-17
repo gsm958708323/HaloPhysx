@@ -12,6 +12,6 @@ public class TransformComp : IComponent
     public void Translate(Vector3 Velocity)
     {
         Position += Velocity;
-        Debugger.Log($"{EntityId} 位置更新：{Position}");
+        // Debugger.Log($"{EntityId} 位置更新：{Position}");
     }
 }
