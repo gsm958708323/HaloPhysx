@@ -6,7 +6,7 @@ using PEMath;
 
 public class MoveComp : IComponent
 {
-    public PEInt Speed = 10;
+    public PEInt Speed = 5;
     public PEVector3 Dir = PEVector3.zero;
 
     public PEVector3 GetVelocity()

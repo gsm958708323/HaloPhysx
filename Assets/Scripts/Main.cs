@@ -67,7 +67,5 @@ public class Main : MonoBehaviour
             var comp = entity.AddComponent<SphereColliderComp>();
             comp.InitByEngineCollider(item);
         }
-
-        Entry.SimulationManager.GetSimulation(Define.Client_Simulation);
     }
 }

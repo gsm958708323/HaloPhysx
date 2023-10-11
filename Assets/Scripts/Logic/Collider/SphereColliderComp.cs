@@ -3,12 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using Frame;
 using PEMath;
-using System.Drawing;
 
 public class SphereColliderComp : ColliderCompBase
 {
-    public PEVector3 Pos { get; internal set; }
-    public string Name { get; internal set; }
     public PEInt Radius { get; internal set; }
 
     public SphereColliderComp()

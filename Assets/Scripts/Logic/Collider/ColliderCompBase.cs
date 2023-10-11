@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Frame;
 using System;
+using PEMath;
 
 public enum ColliderType
 {
@@ -13,6 +14,9 @@ public enum ColliderType
 
 public abstract class ColliderCompBase : IComponent
 {
+    public PEVector3 Pos { get; internal set; }
+    public string Name { get; internal set; }
+
     public ColliderType ColliderType;
 
     public virtual void InitByEngineCollider(UnityEngine.Collider unityCollider)

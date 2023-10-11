@@ -6,8 +6,6 @@ using PEMath;
 
 public class BoxColliderComp : ColliderCompBase
 {
-    public PEVector3 Pos { get; internal set; }
-    public string Name { get; internal set; }
     /// <summary>
     /// 半径
     /// </summary>
