@@ -52,6 +52,8 @@ public class SphereColliderComp : ColliderCompBase
         }
         else
         {
+            info.Colider = collider;
+            info.Adjust = po.normalized * (Radius - po.magnitude);
             return true;
         }
     }
