@@ -67,6 +67,12 @@ public class MoveSystem : IEntitySystem
         else if (collisionList.Count > 1)
         {
             // 碰撞多个
+            PEVector3 adjust = PEVector3.zero;
+            foreach (var item in collisionList)
+            {
+                adjust += item.Adjust;
+            }
+            transfromComp.Position = transfromComp.Position + adjust;
         }
         collider.Pos = transfromComp.Position;
     }
