@@ -34,7 +34,7 @@ public class BoxColliderComp : ColliderCompBase
                     };
     }
 
-    protected override bool IntersectSphere(SphereColliderComp collider)
+    protected override bool IntersectSphere(SphereColliderComp collider, ref CollisionInfo info)
     {
         return false;
     }

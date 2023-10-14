@@ -27,7 +27,7 @@ public class SphereColliderComp : ColliderCompBase
     /// </summary>
     /// <param name="collider"></param>
     /// <returns></returns>
-    protected override bool IntersectBox(BoxColliderComp collider)
+    protected override bool IntersectBox(BoxColliderComp collider, ref CollisionInfo info)
     {
         PEVector3 dir = Pos - collider.Pos;
         // 计算方向向量在矩形内的投影长度
@@ -59,7 +59,7 @@ public class SphereColliderComp : ColliderCompBase
     /// <summary>
     /// 圆与圆：判断两圆心之间的距离是否小于半径
     /// </summary>
-    protected override bool IntersectSphere(SphereColliderComp collider)
+    protected override bool IntersectSphere(SphereColliderComp collider, ref CollisionInfo info)
     {
         PEVector3 dis = Pos - collider.Pos;
         if (PEVector3.SqrMagnitude(dis) > (Radius + collider.Radius) * (Radius + collider.Radius))
@@ -68,6 +68,8 @@ public class SphereColliderComp : ColliderCompBase
         }
         else
         {
+            info.Colider = collider;
+            info.Adjust = dis.normalized * (Radius + collider.Radius - dis.magnitude);
             return true;
         }
     }
