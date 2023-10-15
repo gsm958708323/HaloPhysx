@@ -31,8 +31,12 @@ public abstract class ColliderCompBase : IComponent
 
     public ColliderType ColliderType;
 
-    public virtual void InitByEngineCollider(UnityEngine.Collider unityCollider)
+    public virtual void InitByEngineCollider(UnityEngine.Collider unityCollider, TransformComp transformComp = null)
     {
+        if (transformComp != null)
+        {
+            transformComp.Position = Pos;
+        }
     }
 
     public bool Intersect(ColliderCompBase collider, ref CollisionInfo info)

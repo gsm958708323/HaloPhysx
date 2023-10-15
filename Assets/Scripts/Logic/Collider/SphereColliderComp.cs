@@ -13,13 +13,15 @@ public class SphereColliderComp : ColliderCompBase
         ColliderType = ColliderType.Sphere;
     }
 
-    public override void InitByEngineCollider(Collider unityCollider)
+    public override void InitByEngineCollider(Collider unityCollider, TransformComp transformComp = null)
     {
         var collider = unityCollider as CapsuleCollider;
         var trans = collider.transform;
         this.Name = trans.name;
         this.Pos = new PEVector3(trans.position);
         this.Radius = (PEInt)trans.localScale.x / 2;
+
+        base.InitByEngineCollider(unityCollider, transformComp);
     }
 
     /// <summary>

@@ -27,7 +27,6 @@ public class Main : MonoBehaviour
         sim.AddBehaviour<InputBehaviour>();
         var behaviour = sim.AddBehaviour<EntityBehaviour>();
         behaviour.AddSystem<MoveSystem>();
-        behaviour.AddSystem<CollisionSystem>();
 
         // 添加全局组件
         sim.GetWorld().AddComponent<EnvironmentComp>();
@@ -36,9 +35,9 @@ public class Main : MonoBehaviour
         // 添加玩家实体
         var entity = sim.GetWorld().AddEntity(Define.Player_EntityId);
         entity.AddComponent<MoveComp>();
-        entity.AddComponent<TransformComp>();
+        var transComp = entity.AddComponent<TransformComp>();
         var collider = entity.AddComponent<SphereColliderComp>();
-        collider.InitByEngineCollider(Player.GetComponent<CapsuleCollider>());
+        collider.InitByEngineCollider(Player.GetComponent<CapsuleCollider>(), transComp);
 
         var render = Player.AddComponent<MoveRender>();
         render.SetEntityId(Define.Player_EntityId);

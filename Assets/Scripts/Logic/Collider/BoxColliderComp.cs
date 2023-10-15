@@ -20,7 +20,7 @@ public class BoxColliderComp : ColliderCompBase
         ColliderType = ColliderType.Box;
     }
 
-    public override void InitByEngineCollider(Collider unityCollider)
+    public override void InitByEngineCollider(Collider unityCollider, TransformComp transformComp = null)
     {
         var collider = unityCollider as BoxCollider;
         var trans = collider.transform;
@@ -32,6 +32,7 @@ public class BoxColliderComp : ColliderCompBase
                     new PEVector3(trans.up),
                     new PEVector3(trans.forward),
                     };
+        base.InitByEngineCollider(unityCollider, transformComp);
     }
 
     protected override bool IntersectSphere(SphereColliderComp collider, ref CollisionInfo info)
