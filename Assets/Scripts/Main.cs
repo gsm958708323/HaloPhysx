@@ -15,13 +15,13 @@ public class Main : MonoBehaviour
     void Start()
     {
         InitSimulation();
-        InitEnv();
     }
 
     void InitSimulation()
     {
         // 添加模拟器
         var sim = new Simulation(Define.Client_Simulation);
+        Entry.SimulationManager.AddSimulation(sim);
 
         // 处理行为
         sim.AddBehaviour<InputBehaviour>();
@@ -30,7 +30,6 @@ public class Main : MonoBehaviour
 
         // 添加全局组件
         sim.GetWorld().AddComponent<EnvironmentComp>();
-        Entry.SimulationManager.AddSimulation(sim);
 
         // 添加玩家实体
         var entity = sim.GetWorld().AddEntity(Define.Player_EntityId);
@@ -41,30 +40,7 @@ public class Main : MonoBehaviour
 
         var render = Player.AddComponent<MoveRender>();
         render.SetEntityId(Define.Player_EntityId);
-    }
 
-    void InitEnv()
-    {
-        var simulation = Entry.SimulationManager.GetSimulation(Define.Client_Simulation);
-        var boxColliders = EnvTransform.GetComponentsInChildren<BoxCollider>();
-        foreach (var item in boxColliders)
-        {
-            if (!item.gameObject.activeInHierarchy)
-                continue;
-
-            var entity = simulation.GetWorld().AddEntity(Guid.NewGuid());
-            var comp = entity.AddComponent<BoxColliderComp>();
-            comp.InitByEngineCollider(item);
-        }
-
-        var sphereColliders = EnvTransform.GetComponentsInChildren<CapsuleCollider>();
-        foreach (var item in sphereColliders)
-        {
-            if (!item.gameObject.activeInHierarchy)
-                continue;
-            var entity = simulation.GetWorld().AddEntity(Guid.NewGuid());
-            var comp = entity.AddComponent<SphereColliderComp>();
-            comp.InitByEngineCollider(item);
-        }
+        Entry.SceneManager.InitEnv(EnvTransform);
     }
 }

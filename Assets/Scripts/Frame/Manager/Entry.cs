@@ -17,6 +17,7 @@ namespace Frame
         public static SimulationManager SimulationManager;
         public static DriverManager DriverManager;
         public static TestManager TestManager;
+        public static SceneManager SceneManager;
 
         protected override void Awake()
         {
@@ -31,6 +32,7 @@ namespace Frame
             SimulationManager = GetManager<SimulationManager>();
             DriverManager = GetManager<DriverManager>();
             TestManager = GetManager<TestManager>();
+            SceneManager = GetManager<SceneManager>();
         }
 
         private void Update()
