@@ -20,8 +20,10 @@ namespace Frame
         {
             if (!ExistSystem(system))
             {
-                systemList.Add(system);
                 system.World = Simulation.GetWorld();
+                system.Init();
+                system.Enter();
+                systemList.Add(system);
             }
             return system;
         }

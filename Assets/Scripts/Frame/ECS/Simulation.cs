@@ -50,8 +50,10 @@ namespace Frame
         {
             if (!ExistBehaviour(behaviour))
             {
-                behaviourList.Add(behaviour);
                 behaviour.Simulation = this;
+                behaviour.Init();
+                behaviour.Enter();
+                behaviourList.Add(behaviour);
             }
             return behaviour;
         }
@@ -60,8 +62,9 @@ namespace Frame
         {
             if (ExistBehaviour(behaviour))
             {
-                behaviourList.Remove(behaviour);
+                behaviour.Exit();
                 behaviour.Simulation = null;
+                behaviourList.Remove(behaviour);
             }
         }
 
