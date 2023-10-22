@@ -27,6 +27,6 @@ public class Tree : INode
 
     public void OnDraw()
     {
-
+        root.OnDraw();
     }
 }

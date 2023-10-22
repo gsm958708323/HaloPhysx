@@ -105,5 +105,20 @@ public class Node : INode
 
     public void OnDraw()
     {
+        if (entities.Count != 0)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireCube(Bounds.center, Bounds.size - Vector3.one * 0.1f);
+        }
+        else
+        {
+            Gizmos.color = Color.green;
+            Gizmos.DrawWireCube(Bounds.center, Bounds.size - Vector3.one * 0.1f);
+        }
+
+        foreach (var item in childs)
+        {
+            item.OnDraw();
+        }
     }
 }

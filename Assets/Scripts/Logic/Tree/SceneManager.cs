@@ -37,6 +37,7 @@ public class SceneManager : IManager
             var comp = entity.AddComponent<BoxColliderComp>();
             var transComp = entity.AddComponent<TransformComp>();
             comp.InitByEngineCollider(item, transComp);
+            tree.AddEntity(entity);
         }
 
         var sphereColliders = EnvTransform.GetComponentsInChildren<CapsuleCollider>();
@@ -48,6 +49,12 @@ public class SceneManager : IManager
             var comp = entity.AddComponent<SphereColliderComp>();
             var transComp = entity.AddComponent<TransformComp>();
             comp.InitByEngineCollider(item, transComp);
+            tree.AddEntity(entity);
         }
+    }
+
+    public void OnDraw()
+    {
+        tree.OnDraw();
     }
 }
