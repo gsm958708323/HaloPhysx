@@ -1,10 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using PEMath;
-using System;
 using Frame;
-using Unity.VisualScripting;
 
 public class Main : MonoBehaviour
 {
@@ -38,9 +33,18 @@ public class Main : MonoBehaviour
         var collider = entity.AddComponent<SphereColliderComp>();
         collider.InitByEngineCollider(Player.GetComponent<CapsuleCollider>(), transComp);
 
-        var render = Player.AddComponent<MoveRender>();
+        var render = Player.gameObject.AddComponent<MoveRender>();
         render.SetEntityId(Define.Player_EntityId);
 
         Entry.SceneManager.InitEnv(EnvTransform);
     }
+
+#if UNITY_EDITOR
+    private void OnDrawGizmos()
+    {
+        if (!Application.isPlaying)
+            return;
+        Entry.SceneManager.OnDraw();
+    }
+#endif
 }

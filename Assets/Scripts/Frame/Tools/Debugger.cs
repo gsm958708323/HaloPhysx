@@ -11,7 +11,8 @@ namespace Frame
         None, All,
         Driver,
         Manager,
-        Collider
+        Collider,
+        Quadtree
     }
 
     public class Debugger : MonoSingleton<Debugger>

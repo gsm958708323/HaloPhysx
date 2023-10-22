@@ -8,7 +8,7 @@ namespace Frame
     /// <summary>
     /// 游戏入口
     /// </summary>
-    public partial class Entry : MonoSingleton<Entry>
+    public class Entry : MonoSingleton<Entry>
     {
         /// <summary>
         /// 管理器组成的链表，优先级高的排在前面

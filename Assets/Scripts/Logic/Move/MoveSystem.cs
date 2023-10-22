@@ -7,11 +7,25 @@ using System;
 
 public class MoveSystem : IEntitySystem
 {
+    /// <summary>
+    /// 动态碰撞
+    /// </summary>
+    List<ColliderCompBase> colliderList1 = new();
+    /// <summary>
+    /// 静态碰撞
+    /// </summary>
+    List<ColliderCompBase> colliderList2 = new();
+    /// <summary>
+    /// 碰撞结果
+    /// </summary>
+    List<CollisionInfo> colliderList3 = new();
+
     public override void Tick()
     {
         // 动态碰撞和静态碰撞分开
-        List<ColliderCompBase> colliderList1 = new();
-        List<ColliderCompBase> colliderList2 = new();
+        colliderList1.Clear();
+        colliderList2.Clear();
+
         var entityList = World.GetEntities();
         foreach (var entity in entityList)
         {
@@ -28,7 +42,7 @@ public class MoveSystem : IEntitySystem
 
         foreach (var collider1 in colliderList1)
         {
-            List<CollisionInfo> collisionList = new();
+            colliderList3.Clear();
             foreach (var collider2 in colliderList2)
             {
                 if (collider1 == collider2) continue;
@@ -36,11 +50,11 @@ public class MoveSystem : IEntitySystem
                 if (collider1.Intersect(collider2, ref info))
                 {
                     Debugger.Log($"发生碰撞：{collider1.ColliderType} {collider2.ColliderType}", LogDomain.Collider);
-                    collisionList.Add(info);
+                    colliderList3.Add(info);
                 }
             }
 
-            DoCollision(collider1, collisionList);
+            DoCollision(collider1, colliderList3);
         }
     }
 
@@ -75,6 +89,9 @@ public class MoveSystem : IEntitySystem
             transfromComp.Position = transfromComp.Position + adjust;
         }
         collider.Pos = transfromComp.Position;
+
+        // 位置发生改变，更新entity所在的node
+        Entry.SceneManager.UpdateEntityNode(entity);
     }
 
     void FindColliderComp(Entity entity, List<ColliderCompBase> list)
