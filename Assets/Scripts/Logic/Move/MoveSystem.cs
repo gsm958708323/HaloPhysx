@@ -8,11 +8,11 @@ using System;
 public class MoveSystem : IEntitySystem
 {
     /// <summary>
-    /// 动态碰撞
+    /// 未使用
     /// </summary>
     List<ColliderCompBase> colliderList1 = new();
     /// <summary>
-    /// 静态碰撞
+    /// 所属节点管理的entities
     /// </summary>
     List<ColliderCompBase> colliderList2 = new();
     /// <summary>
@@ -22,42 +22,7 @@ public class MoveSystem : IEntitySystem
 
     public override void Tick()
     {
-        // // 动态碰撞和静态碰撞分开
-        // colliderList1.Clear();
-        // colliderList2.Clear();
-
-        // var entityList = World.GetEntities();
-        // foreach (var entity in entityList)
-        // {
-        //     var moveComp = entity.GetComponent<MoveComp>();
-        //     if (moveComp != null)
-        //     {
-        //         FindColliderComp(entity, colliderList1);
-        //     }
-        //     else
-        //     {
-        //         FindColliderComp(entity, colliderList2);
-        //     }
-        // }
-
-        // foreach (var collider1 in colliderList1)
-        // {
-        //     colliderList3.Clear();
-        //     foreach (var collider2 in colliderList2)
-        //     {
-        //         if (collider1 == collider2) continue;
-        //         CollisionInfo info = new();
-        //         if (collider1.Intersect(collider2, ref info))
-        //         {
-        //             Debugger.Log($"发生碰撞：{collider1.ColliderType} {collider2.ColliderType}", LogDomain.Collider);
-        //             colliderList3.Add(info);
-        //         }
-        //     }
-
-        //     DoCollision(collider1, colliderList3);
-        // }
-
-
+        // 动态碰撞和静态碰撞分开
         var moveComps = World.GetComponents<MoveComp>();
         foreach (var item in moveComps)
         {
@@ -65,32 +30,42 @@ public class MoveSystem : IEntitySystem
             if (entity == null)
                 continue;
 
-            // 处理移动
             var moveComp = entity.GetComponent<MoveComp>();
             var transfromComp = entity.GetComponent<TransformComp>();
-            if (moveComp != null || transfromComp != null)
+            if (moveComp != null && transfromComp != null && moveComp.GetVelocity() != PEVector3.zero)
             {
-                transfromComp.Translate(moveComp.GetVelocity());
+                var collider1 = FindColliderComp(entity);
+                if (collider1 == null)
+                    continue;
 
-                if (Define.TestValue == 1)
+                colliderList1.Clear();
+                colliderList2.Clear();
+                colliderList3.Clear();
+
+                // 处理碰撞节点
+                var node = Entry.SceneManager.GetEntityBelongNode(entity);
+                if (node != null)
                 {
-                    // 位置发生改变，更新entity所在的node
-                    Entry.SceneManager.UpdateEntityNode(entity);
+                    var entityDict = node.GetEntities();
+                    foreach (var other in entityDict)
+                    {
+                        FindColliderComp(other, colliderList2);
+                    }
                 }
+
+                foreach (var collider2 in colliderList2)
+                {
+                    if (collider1 == collider2)
+                        continue;
+                    CollisionInfo info = new();
+                    if (collider1.Intersect(collider2, ref info))
+                    {
+                        Debugger.Log($"发生碰撞：{collider1.ColliderType} {collider2.ColliderType}", LogDomain.Collider);
+                        colliderList3.Add(info);
+                    }
+                }
+                DoCollision(collider1, colliderList3);
             }
-
-            // var node = Entry.SceneManager.GetEntityBelongNode(entity);
-            // if (node == null)
-            //     continue;
-
-            // var entityDict = node.GetEntities();
-            // Debugger.Log(entityDict.Count.ToString());
-
-            // foreach (var other in entityDict)
-            // {
-            //     if (entity == other)
-            //         continue;
-            // }
         }
     }
 
@@ -135,12 +110,26 @@ public class MoveSystem : IEntitySystem
         if (entity == null)
             return;
 
+        var collder = FindColliderComp(entity);
+        if (collder != null)
+        {
+            list.Add(collder);
+        }
+    }
+
+    ColliderCompBase FindColliderComp(Entity entity)
+    {
+        if (entity == null)
+            return null;
+
         var collder = entity.GetComponent<SphereColliderComp>();
         if (collder != null)
-            list.Add(collder);
+            return collder;
 
         var collder2 = entity.GetComponent<BoxColliderComp>();
         if (collder2 != null)
-            list.Add(collder2);
+            return collder2;
+
+        return null;
     }
 }
