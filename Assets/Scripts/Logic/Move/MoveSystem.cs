@@ -22,39 +22,75 @@ public class MoveSystem : IEntitySystem
 
     public override void Tick()
     {
-        // 动态碰撞和静态碰撞分开
-        colliderList1.Clear();
-        colliderList2.Clear();
+        // // 动态碰撞和静态碰撞分开
+        // colliderList1.Clear();
+        // colliderList2.Clear();
 
-        var entityList = World.GetEntities();
-        foreach (var entity in entityList)
+        // var entityList = World.GetEntities();
+        // foreach (var entity in entityList)
+        // {
+        //     var moveComp = entity.GetComponent<MoveComp>();
+        //     if (moveComp != null)
+        //     {
+        //         FindColliderComp(entity, colliderList1);
+        //     }
+        //     else
+        //     {
+        //         FindColliderComp(entity, colliderList2);
+        //     }
+        // }
+
+        // foreach (var collider1 in colliderList1)
+        // {
+        //     colliderList3.Clear();
+        //     foreach (var collider2 in colliderList2)
+        //     {
+        //         if (collider1 == collider2) continue;
+        //         CollisionInfo info = new();
+        //         if (collider1.Intersect(collider2, ref info))
+        //         {
+        //             Debugger.Log($"发生碰撞：{collider1.ColliderType} {collider2.ColliderType}", LogDomain.Collider);
+        //             colliderList3.Add(info);
+        //         }
+        //     }
+
+        //     DoCollision(collider1, colliderList3);
+        // }
+
+
+        var moveComps = World.GetComponents<MoveComp>();
+        foreach (var item in moveComps)
         {
+            var entity = World.GetEntity(item.EntityId);
+            if (entity == null)
+                continue;
+
+            // 处理移动
             var moveComp = entity.GetComponent<MoveComp>();
-            if (moveComp != null)
+            var transfromComp = entity.GetComponent<TransformComp>();
+            if (moveComp != null || transfromComp != null)
             {
-                FindColliderComp(entity, colliderList1);
-            }
-            else
-            {
-                FindColliderComp(entity, colliderList2);
-            }
-        }
+                transfromComp.Translate(moveComp.GetVelocity());
 
-        foreach (var collider1 in colliderList1)
-        {
-            colliderList3.Clear();
-            foreach (var collider2 in colliderList2)
-            {
-                if (collider1 == collider2) continue;
-                CollisionInfo info = new();
-                if (collider1.Intersect(collider2, ref info))
+                if (Define.TestValue == 1)
                 {
-                    Debugger.Log($"发生碰撞：{collider1.ColliderType} {collider2.ColliderType}", LogDomain.Collider);
-                    colliderList3.Add(info);
+                    // 位置发生改变，更新entity所在的node
+                    Entry.SceneManager.UpdateEntityNode(entity);
                 }
             }
 
-            DoCollision(collider1, colliderList3);
+            // var node = Entry.SceneManager.GetEntityBelongNode(entity);
+            // if (node == null)
+            //     continue;
+
+            // var entityDict = node.GetEntities();
+            // Debugger.Log(entityDict.Count.ToString());
+
+            // foreach (var other in entityDict)
+            // {
+            //     if (entity == other)
+            //         continue;
+            // }
         }
     }
 

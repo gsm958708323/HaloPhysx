@@ -12,11 +12,9 @@ public class SceneManager : IManager
     public List<Entity> Entities = new();
     public Bounds Bounds;
     Tree tree;
-    Dictionary<Entity, PEVector3> allPos;
 
     public void InitEnv(Transform EnvTransform)
     {
-        allPos = new();
         InitTree(EnvTransform);
         InitCollider(EnvTransform);
     }
@@ -40,7 +38,7 @@ public class SceneManager : IManager
             var comp = entity.AddComponent<BoxColliderComp>();
             var transComp = entity.AddComponent<TransformComp>();
             comp.InitByEngineCollider(item, transComp);
-            tree.AddEntity(entity);
+            AddEntity(entity);
         }
 
         var sphereColliders = EnvTransform.GetComponentsInChildren<CapsuleCollider>();
@@ -52,13 +50,28 @@ public class SceneManager : IManager
             var comp = entity.AddComponent<SphereColliderComp>();
             var transComp = entity.AddComponent<TransformComp>();
             comp.InitByEngineCollider(item, transComp);
-            tree.AddEntity(entity);
+            AddEntity(entity);
         }
+    }
+
+    public void AddEntity(Entity entity)
+    {
+        tree.AddEntity(entity);
+    }
+
+    public void RemoveEntity(Entity entity)
+    {
+        tree.RemoveEntity(entity);
     }
 
     public void UpdateEntityNode(Entity entity)
     {
         tree.UpdateEntityNode(entity);
+    }
+
+    public Node GetEntityBelongNode(Entity entity)
+    {
+        return tree.GetEntityBelongNode(entity);
     }
 
     public void OnDraw()

@@ -58,6 +58,11 @@ public class Node : INode
         this.childDict = new();
     }
 
+    public HashSet<Entity> GetEntities()
+    {
+        return entitySet;
+    }
+
     public void RemoveEntity(Entity entity)
     {
         if (entitySet.Contains(entity))
@@ -123,7 +128,7 @@ public class Node : INode
         else
         {
             entitySet.Add(entity);
-            root.AddEntityNode(entity, this);
+            root.RecordEntityNode(entity, this);
         }
     }
 

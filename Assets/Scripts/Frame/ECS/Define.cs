@@ -8,5 +8,6 @@ namespace Frame
 
         public static Guid Player_EntityId = Guid.NewGuid();
         public static Guid Env_EntityId = Guid.NewGuid();
+        public static int TestValue = 0;
     }
 }

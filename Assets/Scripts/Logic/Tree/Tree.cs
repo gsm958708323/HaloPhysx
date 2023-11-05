@@ -20,7 +20,7 @@ public class Tree : INode
     public Tree(Bounds bounds)
     {
         Bounds = bounds;
-        MaxDepth = 5;
+        MaxDepth = 4;
         ChildCount = 4;
         root = new Node(bounds, 0, this, null);
         allEntity2Node = new();
@@ -32,18 +32,22 @@ public class Tree : INode
     /// <param name="entity"></param>
     public void UpdateEntityNode(Entity entity)
     {
-        // todo 超出节点范围才移除
+        RemoveEntity(entity);
+        AddEntity(entity);
+    }
 
+    public void RemoveEntity(Entity entity)
+    {
+        // todo 超出节点范围才移除
         // 节点删除此entity，若此节点管理数量为0，父节点清除此节点的引用
         if (allEntity2Node.TryGetValue(entity, out Node oldNode))
         {
             oldNode.RemoveEntity(entity);
             allEntity2Node.Remove(entity);
         }
-        AddEntity(entity);
     }
 
-    public void AddEntityNode(Entity entity, Node node)
+    public void RecordEntityNode(Entity entity, Node node)
     {
         if (allEntity2Node.ContainsKey(entity))
         {
@@ -51,6 +55,14 @@ public class Tree : INode
             return;
         }
         allEntity2Node[entity] = node;
+    }
+
+    public Node GetEntityBelongNode(Entity entity)
+    {
+        if (!allEntity2Node.ContainsKey(entity))
+            return null;
+
+        return allEntity2Node[entity];
     }
 
     public void AddEntity(Entity entity)

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine.AI;
 
 namespace Frame
 {
@@ -63,10 +62,30 @@ namespace Frame
                 compEntityDict[comp.EntityId] = new List<IComponent>();
             if (!compEntityDict[comp.EntityId].Contains(comp))
                 compEntityDict[comp.EntityId].Add(comp);
+
+            // AddComponentCustom(comp);
+        }
+
+        /// <summary>
+        /// 组件自定义逻辑
+        /// </summary>
+        /// <param name="comp"></param>
+        void AddComponentCustom(IComponent comp)
+        {
+            if (comp is TransformComp)
+            {
+                var entity = GetEntity(comp.EntityId);
+                if (entity != null)
+                {
+                    // tips: 这时TransformComp的数据还没有完全初始化完成，需要手动添加
+                    Entry.SceneManager.AddEntity(entity);
+                }
+            }
         }
 
         public void RemoveComponent(IComponent comp)
         {
+            RemoveComponentCustom(comp);
             Type type = comp.GetType();
             if (compTypeDict.ContainsKey(type))
                 if (compTypeDict[type].Contains(comp))
@@ -75,6 +94,18 @@ namespace Frame
             if (compEntityDict.ContainsKey(comp.EntityId))
                 if (compEntityDict[comp.EntityId].Contains(comp))
                     compEntityDict[comp.EntityId].Remove(comp);
+        }
+
+        public void RemoveComponentCustom(IComponent comp)
+        {
+            if (comp is TransformComp)
+            {
+                var entity = GetEntity(comp.EntityId);
+                if (entity != null)
+                {
+                    Entry.SceneManager.RemoveEntity(entity);
+                }
+            }
         }
 
         /// <summary>
@@ -171,6 +202,7 @@ namespace Frame
             if (entity == null)
                 return false;
 
+            Entry.SceneManager.RemoveEntity(entity);
             RemoveEntityComponentAll(entityId);
             entity.World = null;
             Entity.ObjectPool.Recycle(entity);
@@ -193,8 +225,5 @@ namespace Frame
                 compEntityDict.Remove(entityId);
             }
         }
-
-
-
     }
 }
