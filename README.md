@@ -7,4 +7,4 @@
 ### 逻辑与表现分离
 
 ![输入图片说明](Doc/img1.png)
-https://www.bilibili.com/video/BV1W94y1573c/?spm_id_from=333.999.0.0&vd_source=7eb72ab765cd160f80bf5acc4f978ae3
+https://www.bilibili.com/video/BV1Sg4y1X7uU/?share_source=copy_web&vd_source=106874aaf4328482a5483ca738955e96
